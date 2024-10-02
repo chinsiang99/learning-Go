@@ -7,3 +7,8 @@ func main() {
 }
 
 // run: go run app.go
+// we can use go build even without go being installed
+// remember a module consists of many packages, a module can be considered as a project
+// in order to create a module, we can use go mod init
+// example: go mod init example.com/first-app
+// in windows, it will give u an exe file (first-app.exe)
