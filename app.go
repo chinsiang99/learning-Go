@@ -2,6 +2,7 @@ package main // this is important to be named "main" package, because "main" is 
 
 import "fmt" // this is a package
 
+// this function is called "main" because go will execute this function when the program starts
 func main() {
 	fmt.Print("Hello World")
 }
