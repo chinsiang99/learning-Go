@@ -1,0 +1,55 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (for Go modules)
+vendor/
+
+# Go workspace file
+go.work
+
+# Go build cache directory
+/tmp/
+
+# Go mod cache
+/go/pkg/mod/
+
+# Visual Studio Code specific
+.vscode/
+.history/
+
+# Logs
+*.log
+
+# Environment variable files
+.env
+
+# Compiled objects
+*.o
+*.a
+*.lo
+*.la
+*.lai
+*.so
+
+# Debugging files
+*.prof
+*.trace
+*.cover
+
+# Coverages
+coverage.out
+
+# Configurations and temporary files
+node_modules/
+dist/
+build/
