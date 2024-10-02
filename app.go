@@ -1,6 +1,6 @@
 package main
 
-import "fmt"
+import "fmt" // this is a package
 
 func main() {
 	fmt.Print("Hello World")
