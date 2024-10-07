@@ -1,17 +1,16 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"strconv"
+
+	"chinisang.com/simple-bank-app-split/fileops"
 )
 
 const accountBalanceFile = "balance.txt"
 
 func main() {
 	// var accountBalance float64 = 1000
-	accountBalance, err := getBalanceFromFile()
+	accountBalance, err := fileops.GetFloatFromFile(accountBalanceFile)
 
 	if err != nil {
 		fmt.Println("Error")
@@ -47,7 +46,7 @@ func main() {
 			}
 			accountBalance += depositAmount
 			fmt.Println("Balance updated! New amount:", accountBalance)
-			writeBalanceToFile(accountBalance)
+			fileops.WriteBalanceToFile(accountBalance, accountBalanceFile)
 		} else if choice == 3 {
 			fmt.Print("Your Withdrawal amount: ")
 			var withdrawalAmount float64
@@ -66,7 +65,7 @@ func main() {
 			}
 			accountBalance -= withdrawalAmount
 			fmt.Println("Balance updated! New amount:", accountBalance)
-			writeBalanceToFile(accountBalance)
+			fileops.WriteBalanceToFile(accountBalance, accountBalanceFile)
 		} else {
 			fmt.Println("Thanks for using Go bank application, have a nice day!")
 			// return // if we are using return instead, it will stop the function and will not execute next steps, therefore, break is been used here
@@ -77,26 +76,26 @@ func main() {
 	fmt.Println("Thanks for choosing our bank application!")
 }
 
-func writeBalanceToFile(balance float64) {
-	balanceText := fmt.Sprint(balance)
-	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644) // 0644 is file permission
-}
+// func writeBalanceToFile(value float64, fileName string) {
+// 	valueText := fmt.Sprint(value)
+// 	os.WriteFile(fileName, []byte(valueText), 0644) // 0644 is file permission
+// }
 
-func getBalanceFromFile() (float64, error) {
-	data, err := os.ReadFile(accountBalanceFile)
+// func getFloatFromFile(fileName string) (float64, error) {
+// 	data, err := os.ReadFile(fileName)
 
-	if err != nil {
-		return 1000, errors.New("failed to find balance file")
-	}
+// 	if err != nil {
+// 		return 1000, errors.New("failed to find file")
+// 	}
 
-	balanceText := string(data)
-	// float64(balanceText)
-	balance, err := strconv.ParseFloat(balanceText, 64)
-	if err != nil {
-		return 1000, errors.New(("failed to parse stored balance value"))
-	}
-	return balance, nil
-}
+// 	valueText := string(data)
+// 	// float64(valueText)
+// 	value, err := strconv.ParseFloat(valueText, 64)
+// 	if err != nil {
+// 		return 1000, errors.New(("failed to parse stored value"))
+// 	}
+// 	return value, nil
+// }
 
 // func presentOptions() {
 // 	fmt.Println("Welcome to Go bank application")
