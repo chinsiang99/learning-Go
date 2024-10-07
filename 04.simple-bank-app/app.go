@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func main() {
-	var accountBalance float64 = 1000
+	// var accountBalance float64 = 1000
+	accountBalance := getBalanceFromFile()
 
 	// for in Go is the only loop you can use
 	// for i := 0; i < 2; i++ {
@@ -69,7 +71,17 @@ func main() {
 	fmt.Println("Thanks for choosing our bank application!")
 }
 
+const accountBalanceFile = "balance.txt"
+
 func writeBalanceToFile(balance float64) {
 	balanceText := fmt.Sprint(balance)
-	os.WriteFile("balance.txt", []byte(balanceText), 0644) // 0644 is file permission
+	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644) // 0644 is file permission
+}
+
+func getBalanceFromFile() float64 {
+	data, _ := os.ReadFile(accountBalanceFile)
+	balanceText := string(data)
+	// float64(balanceText)
+	balance, _ := strconv.ParseFloat(balanceText, 64)
+	return balance
 }
