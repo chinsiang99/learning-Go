@@ -22,6 +22,9 @@ func main() {
 	profit := ebt * (1 - taxRate/100) // earning after tax
 	ratio := ebt / profit
 
+	formattedStringFutureValue := fmt.Sprintf("Future value: %.1f\n", revenue)
+	fmt.Print(formattedStringFutureValue)
+
 	fmt.Printf("Future value: %v\n", revenue)
 	fmt.Println("ebt: ", ebt)
 	fmt.Println("profit: ", profit)
