@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 		panic(err)
-		return
+		// return
 	}
 
 	expenses, err := getUserInput("Expenses: ")
