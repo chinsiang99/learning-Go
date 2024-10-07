@@ -67,3 +67,13 @@ But this function also has an important limitation: You can't (easily) fetch mul
 For the moment, we only need single words / digits as input, so that's no problem.
 
 Later in the course, when we work on projects where more complex input values are required, you'll therefore learn about an alternative to fmt.Scan().
+
+# Conditional For Loops
+Besides the for variations introduced in the last lectures, there also is another common variation (which will also be shown again later in the course):
+
+for someCondition {
+  // do something ...
+}
+someCondition is an expression that yields a boolean value or a variable that contains a boolean value (i.e., true or false).
+
+In that case, the loop will continue to execute the code inside the loop body until the condition / variable yields false.
