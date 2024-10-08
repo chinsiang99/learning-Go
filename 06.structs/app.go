@@ -31,23 +31,33 @@ func (u *user) clearUserName() {
 	u.lastName = ""
 }
 
+func newUser(firstName string, lastName string, birthDate string) *user {
+	return &user{
+		firstName: firstName,
+		lastName:  lastName,
+		birthDate: birthDate,
+	}
+}
+
 func main() {
 	userFirstName := getUserData("Please enter your first name: ")
 	userLastName := getUserData("Please enter your last name: ")
 	userBirthDate := getUserData("Please enter your birthdate (MM/DD/YYYY): ")
 
-	var appUser user
+	var appUser *user
+
+	appUser = newUser(userFirstName, userLastName, userBirthDate)
 
 	// empty value
 	// appUser = user{}
 
 	// struct literal
-	appUser = user{
-		firstName: userFirstName,
-		lastName:  userLastName,
-		birthDate: userBirthDate,
-		// createdAt: time.Now(),
-	}
+	// appUser = user{
+	// 	firstName: userFirstName,
+	// 	lastName:  userLastName,
+	// 	birthDate: userBirthDate,
+	// 	// createdAt: time.Now(),
+	// }
 
 	// fmt.Println(firstName, lastName, birthDate)
 	// outputUserDetails(&appUser)
