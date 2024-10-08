@@ -303,3 +303,94 @@ For example, the null value of an int variable is 0. Of a float64, it would be 0
 For a pointer, it's nil - a special value built-into Go.
 
 nil represents the absence of an address value - i.e., a pointer pointing at no address / no value in memory.
+
+# Structs
+- grouping data & functions into collections
+- what are structs?
+- creating and using structs
+- adding methods to structs
+
+In Go, structs are composite data types that allow you to group together different data fields under a single name. They are used for organizing data and can also encapsulate functions as methods. Here’s a breakdown of structs in Go:
+
+## What are Structs?
+- Definition: Structs are **user-defined types** that contain named fields (data members).
+- Purpose: They allow you to **group together different types of data** into a single unit.
+
+## Creating and Using Structs
+To define a struct in Go, you use the type and struct keywords followed by the name of the struct and its fields:
+
+```bash
+type Person struct {
+    firstName string
+    lastName  string
+    age       int
+}
+```
+
+- Creating Instances: You can create instances (objects) of a struct using the struct literal syntax:
+
+```bash
+p := Person{
+    firstName: "John",
+    lastName:  "Doe",
+    age:       30,
+}
+```
+
+- Accessing Fields: Struct fields are accessed using dot notation (.)
+```bash
+fmt.Println("First Name:", p.firstName)
+fmt.Println("Last Name:", p.lastName)
+fmt.Println("Age:", p.age)
+```
+
+## Adding Methods to Structs
+In Go, methods are functions associated with a type. You can define methods for structs by specifying the receiver type (the struct itself):
+
+```bash
+func (p Person) fullName() string {
+    return p.firstName + " " + p.lastName
+}
+```
+
+- **Receiver**: **(p Person) indicates that the fullName method is associated with the Person struct**.
+- Usage: Methods are called using dot notation on instances of the struct:
+
+## Example
+
+```bash
+package main
+
+import "fmt"
+
+type Person struct {
+    firstName string
+    lastName  string
+    age       int
+}
+
+func (p Person) fullName() string {
+    return p.firstName + " " + p.lastName
+}
+
+func main() {
+    p := Person{
+        firstName: "John",
+        lastName:  "Doe",
+        age:       30,
+    }
+
+    fmt.Println("First Name:", p.firstName)
+    fmt.Println("Last Name:", p.lastName)
+    fmt.Println("Age:", p.age)
+    fmt.Println("Full Name:", p.fullName())
+}
+```
+
+In this example:
+
+- We define a Person struct with fields firstName, lastName, and age.
+- We define a fullName method that concatenates the first and last names.
+- We create an instance p of type Person and print its fields and the result of calling fullName().
+
+Structs in Go are fundamental for organizing data and are often used in place of classes in other object-oriented languages like Java or Python. They provide a flexible way to manage and manipulate structured data within your programs.
