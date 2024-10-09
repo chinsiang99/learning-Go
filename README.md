@@ -394,3 +394,140 @@ In this example:
 - We create an instance p of type Person and print its fields and the result of calling fullName().
 
 Structs in Go are fundamental for organizing data and are often used in place of classes in other object-oriented languages like Java or Python. They provide a flexible way to manage and manipulate structured data within your programs.
+
+# Struct Tags
+In Go, struct tags are annotations attached to struct fields. They provide metadata that can be used by reflection to influence the behavior of libraries or frameworks, such as how data is marshaled to JSON or how values are mapped from databases. Struct tags are written as raw string literals immediately following the field declaration within a struct definition.
+
+## Basic Example of Struct Tags
+Here’s a simple example with struct tags used for JSON serialization:
+```bash
+type User struct {
+    ID   int    `json:"id"`
+    Name string `json:"name"`
+    Age  int    `json:"age"`
+}
+```
+In this example:
+
+The struct tags (json:"id", json:"name", and json:"age") tell the encoding/json package how to serialize and deserialize the struct fields when converting to/from JSON.
+
+## Struct Tag Syntax
+Struct tags are raw string literals in backticks and typically consist of key-value pairs separated by spaces. The key identifies the user of the tag (like json in the previous example), and the value specifies additional instructions (e.g., how the field should be represented).
+
+> FieldName Type `key1:"value1" key2:"value2"`
+
+You can have multiple key-value pairs in a single tag, separated by spaces:
+```bash
+type Person struct {
+    FirstName string `json:"first_name" db:"first_name" validate:"required"`
+}
+```
+
+In this example:
+
+- json:"first_name" tells the JSON marshaller to use "first_name" as the key in JSON output.
+- db:"first_name" could be used by an ORM to map this field to a database column called "first_name".
+- validate:"required" could be used by a validation library to ensure that this field is present.
+
+## Common Uses of Struct Tags
+1. JSON/Marshalling Tags (json): These tags are used when converting structs to and from JSON format with the encoding/json package.
+
+Example:
+```bash
+type Product struct {
+    Name  string `json:"name"`
+    Price int    `json:"price,omitempty"`
+}
+```
+- omitempty: When converting to JSON, if Price is set to the zero value (0 for integers, empty string for strings, etc.), it will be omitted from the JSON output.
+
+2. Database Tags (db): Struct tags are often used by ORMs to map struct fields to database columns.
+
+Example:
+```bash
+type Book struct {
+    Title  string `db:"title"`
+    Author string `db:"author_name"`
+    Pages  int    `db:"pages"`
+}
+```
+In this example, the db tags tell the ORM what the corresponding column names are in the database.
+
+3. Validation Tags (validate): Libraries like go-playground/validator use struct tags to define validation rules for struct fields.
+```bash
+type User struct {
+    Email string `validate:"required,email"`
+    Age   int    `validate:"gte=18"`
+}
+```
+
+- required: The field must be present.
+- email: The field must contain a valid email address.
+- gte=18: The Age must be greater than or equal to 18.
+
+4. Custom Struct Tags: You can define your own struct tags if you write a library that uses reflection to inspect struct fields.
+Example:
+```bash
+type Config struct {
+    Host string `config:"server_host"`
+    Port int    `config:"server_port"`
+}
+```
+You can use the Go reflect package to access and use these tags in your own logic.
+
+## Accessing Struct Tags
+To access struct tags programmatically, you can use the reflect package. Here’s an example of how to retrieve the json struct tag for a field:
+
+```bash
+package main
+
+import (
+    "fmt"
+    "reflect"
+)
+
+type User struct {
+    ID   int    `json:"id"`
+    Name string `json:"name"`
+    Age  int    `json:"age"`
+}
+
+func main() {
+    u := User{}
+    t := reflect.TypeOf(u)
+    field, _ := t.FieldByName("Name")
+    
+    // Access the "json" tag
+    jsonTag := field.Tag.Get("json")
+    fmt.Println("JSON Tag for 'Name':", jsonTag)
+}
+```
+
+This will output:
+> JSON Tag for 'Name': name
+
+## Tag Variants
+1. Omitting Fields from Tags: You can omit a struct field from being serialized by using a hyphen (-) in a tag:
+```bash
+type User struct {
+    Password string `json:"-"`
+}
+```
+
+2. Customizing Tags for Special Needs: You can use special options in struct tags. For example, when using gorm (an ORM library), tags might look like:
+```bash
+type Employee struct {
+    ID   int    `gorm:"primary_key"`
+    Name string `gorm:"type:varchar(100)"`
+}
+```
+- primary_key: Marks the ID field as the primary key.
+- type:varchar(100): Specifies the SQL type for the Name field.
+
+## Struct Tag Rules
+1. Tags should be quoted as string literals in backticks (`).
+2. Each key can only appear once in a struct tag. If a key is repeated, only the last one will be used.
+3. Tags are optional. If you don’t need them, you can define structs without tags.
+
+## Conclusion
+Struct tags in Go are a powerful way to add metadata to struct fields, allowing you to control how data is marshaled, validated, or mapped to other systems. They are often used by libraries (e.g., json, database/sql, validator) but can also be custom-defined for specific use cases. Understanding struct tags and how to use them with reflection gives you flexibility when working with data in Go.
