@@ -20,6 +20,11 @@ func main() {
 		return
 	}
 
+	admin := user.NewAdmin("dummy email", "dummy password")
+
+	admin.User.OutputUserDetails()
+	admin.OutputUserDetails()
+
 	// empty value
 	// appUser = user{}
 
