@@ -49,6 +49,18 @@ func main() {
 	courseRatings2["go"] = 5.55
 
 	courseRatings2.output()
+
+	// for loops with arrays, slices, maps
+	// for range userNames {
+
+	// }
+	for index, value := range userNames {
+		fmt.Println(index, value)
+	}
+
+	for key, value := range courseRatings {
+		fmt.Println(key, value)
+	}
 }
 
 // custom type aliases (better development experience)
