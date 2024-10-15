@@ -34,4 +34,8 @@ func main() {
 	// if we want to amend the original array, we need to reassign it, Go will help us to do the memory management instead
 	dynamicPrices = dynamicPrices[1:]
 	fmt.Println(dynamicPrices)
+
+	discountedPrices := []float64{1.0, 99.9}
+	updatedPrices = append(updatedPrices, discountedPrices...)
+	fmt.Println(updatedPrices)
 }
