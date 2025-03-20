@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	filemanager "chinsiang.com/price-calculator/file-manager"
 	"chinsiang.com/price-calculator/prices"
 )
 
@@ -23,7 +24,8 @@ func main() {
 	// 	priceForEachTaxRate[taxRate] = priceAfterTax
 	// }
 	for _, taxRate := range taxRates {
-		job := prices.NewTaxIncludedPriceJob(taxRate)
+		fileManager := filemanager.NewFileManager("prices.txt", fmt.Sprintf("result_%.0f.json", taxRate*100))
+		job := prices.NewTaxIncludedPriceJob(fileManager, taxRate)
 		job.Process()
 		fmt.Println(job.TaxIncludedPrices, "this is price for each tax rate")
 	}
