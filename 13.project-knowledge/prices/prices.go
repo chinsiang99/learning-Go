@@ -77,4 +77,5 @@ func (job *TaxIncludedPriceJob) LoadData() {
 	}
 
 	job.InputPrices = prices
+	file.Close()
 }
