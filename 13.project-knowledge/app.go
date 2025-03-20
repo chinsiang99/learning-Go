@@ -19,9 +19,9 @@ func main() {
 		priceForEachTaxRate[taxRate] = priceAfterTax
 	}
 	fmt.Println(priceForEachTaxRate, "this is price for each tax rate")
-	for key, value := range priceForEachTaxRate {
-		for index, priceAfterTax := range value {
-			fmt.Println("Tax rate: ", key, "Before tax: ", price[index], "After tax: ", priceAfterTax)
-		}
-	}
+	// for key, value := range priceForEachTaxRate {
+	// 	for index, priceAfterTax := range value {
+	// 		fmt.Println("Tax rate: ", key, "Before tax: ", price[index], "After tax: ", priceAfterTax)
+	// 	}
+	// }
 }
