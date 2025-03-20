@@ -3,6 +3,7 @@ package prices
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 )
@@ -25,7 +26,7 @@ func (job *TaxIncludedPriceJob) Process() {
 	result := make(map[string]float64)
 
 	for _, price := range job.InputPrices {
-		result[fmt.Sprintf("Before tax: %.2f After tax: %.2f", price, price*(1+job.TaxRate))] = price * (1 + job.TaxRate)
+		result[fmt.Sprintf("Before tax: %.2f After tax: %.2f", price, price*(1+job.TaxRate))] = math.Round(price * (1 + job.TaxRate))
 	}
 
 	job.TaxIncludedPrices = result
