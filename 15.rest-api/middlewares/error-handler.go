@@ -17,22 +17,36 @@ func ErrorHandler() gin.HandlerFunc {
 			return
 		}
 
-		// Retrieve custom messages if available
-		customMessages, _ := context.Get("validationMessages")
-
 		for _, err := range context.Errors {
 			switch e := err.Err.(type) {
 			case validator.ValidationErrors:
-				messages := map[string]string{}
-				if customMessages != nil {
-					messages = customMessages.(map[string]string)
+				// Safely retrieve custom validation messages
+				customMessages, ok := context.Get("validationMessages")
+				customFieldStructTagMapping, ok := context.Get("fieldStructTagMapping")
+				if !ok {
+					context.JSON(http.StatusInternalServerError, gin.H{"error": "Validation messages not provided"})
+					return
 				}
-				errors := utils.HandleValidationError(e, messages)
+
+				// Ensure it's a map[string]string to prevent panic
+				messageMap, ok := customMessages.(map[string]string)
+				if !ok {
+					context.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid validation message format"})
+					return
+				}
+
+				fieldStructTagMapping, ok := customFieldStructTagMapping.(map[string]string)
+				if !ok {
+					context.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid field struct tag mapping format"})
+					return
+				}
+
+				errors := utils.HandleValidationError(e, messageMap, fieldStructTagMapping)
 				context.JSON(http.StatusBadRequest, gin.H{"errors": errors})
 				return
 
 			case *json.UnmarshalTypeError:
-				context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid data type provided"})
+				context.JSON(http.StatusBadRequest, gin.H{"message": "Invalid data type provided"})
 				return
 
 			default:

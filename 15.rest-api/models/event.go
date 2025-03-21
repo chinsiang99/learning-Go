@@ -11,13 +11,22 @@ type Event struct {
 	UserID      int       `json:"userId"`
 }
 
-// Custom validation error messages for Event
+// Custom validation error messages for Event using JSON field names
 func (e *Event) ValidationMessages() map[string]string {
 	return map[string]string{
-		"title":       "Event title cannot be empty.",
-		"description": "Please provide a valid event description.",
-		"location":    "Location must be specified.",
-		"dateTime":    "Provide a valid date and time for the event.",
+		"Title":       "Event title cannot be empty.",
+		"Description": "Please provide a valid event description.",
+		"Location":    "Location must be specified.",
+		"DateTime":    "Provide a valid date and time for the event.",
+	}
+}
+
+func (e *Event) FieldStructTagMapping() map[string]string {
+	return map[string]string{
+		"Title":       "title",
+		"Description": "description",
+		"Location":    "location",
+		"DateTime":    "dateTime",
 	}
 }
 

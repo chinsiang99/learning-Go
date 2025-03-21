@@ -55,7 +55,7 @@ func createEvent(context *gin.Context) {
 	var event models.Event
 	err := context.ShouldBindJSON(&event)
 	if err != nil {
-		validationErrors := utils.HandleValidationError(err, event.ValidationMessages())
+		validationErrors := utils.HandleValidationError(err, event.ValidationMessages(), event.FieldStructTagMapping())
 		if len(validationErrors) > 0 {
 			context.JSON(http.StatusBadRequest, gin.H{"errors": validationErrors})
 			return

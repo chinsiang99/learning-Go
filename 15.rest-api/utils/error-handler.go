@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"fmt"
-
 	"github.com/go-playground/validator/v10"
 )
 
@@ -13,20 +11,17 @@ type ErrorResponse struct {
 }
 
 // HandleValidationError processes validation errors with custom messages
-func HandleValidationError(err error, customMessages map[string]string) []ErrorResponse {
+func HandleValidationError(err error, customMessages map[string]string, fieldStructTagMapping map[string]string) []ErrorResponse {
 	var validationErrors []ErrorResponse
-
 	if errs, ok := err.(validator.ValidationErrors); ok {
 		for _, e := range errs {
-			// Check if a custom message is provided
-			fmt.Print(e.Field())
 			message, found := customMessages[e.Field()]
 			if !found {
 				message = "Invalid input for " + e.Field()
 			}
 
 			validationErrors = append(validationErrors, ErrorResponse{
-				Field:   e.Field(),
+				Field:   fieldStructTagMapping[e.Field()],
 				Message: message,
 			})
 		}

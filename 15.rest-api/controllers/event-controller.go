@@ -1,11 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"chinsiang.com/rest-api/models"
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 func GetEvents(context *gin.Context) {
@@ -26,7 +27,9 @@ func CreateEvent(context *gin.Context) {
 	if err := context.ShouldBindJSON(&event); err != nil {
 		if validationErrs, ok := err.(validator.ValidationErrors); ok {
 			// Set custom error messages only for validation errors
+			fmt.Println(event.ValidationMessages(), "this is validation message")
 			context.Set("validationMessages", event.ValidationMessages())
+			context.Set("fieldStructTagMapping", event.FieldStructTagMapping())
 			context.Error(validationErrs) // Pass the error to middleware
 			return
 		}
