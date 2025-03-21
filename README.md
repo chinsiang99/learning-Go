@@ -531,3 +531,148 @@ type Employee struct {
 
 ## Conclusion
 Struct tags in Go are a powerful way to add metadata to struct fields, allowing you to control how data is marshaled, validated, or mapped to other systems. They are often used by libraries (e.g., json, database/sql, validator) but can also be custom-defined for specific use cases. Understanding struct tags and how to use them with reflection gives you flexibility when working with data in Go.
+
+# Concurrency
+**Concurrency** in *Go* refers to the ability to run multiple tasks independently but not necessarily at the same time. It's a way to efficiently manage multiple operations using fewer resources.
+
+Go provides built-in support for concurrency using goroutines and channels.
+
+## 🧑‍💻 Key Concepts in Go Concurrency
+1. Goroutines
+- Lightweight threads managed by the Go runtime.
+- Execute functions concurrently.
+- Created using the go keyword.
+
+2. Channels
+- Used to communicate between goroutines safely.
+- Provide a way to send and receive data.
+
+3. Wait Groups
+- Synchronize multiple goroutines.
+- Mutex
+- Prevent race conditions using a lock.
+
+## ✅ 1. Goroutines
+A goroutine is a function that runs concurrently. It’s like a lightweight thread.
+
+Example:
+```go
+package main
+import (
+	"fmt"
+	"time"
+)
+
+func printMessage(message string) {
+	for i := 0; i < 5; i++ {
+		fmt.Println(message)
+		time.Sleep(time.Millisecond * 500)
+	}
+}
+
+func main() {
+	go printMessage("Hello from Goroutine!") // Run concurrently
+	printMessage("Hello from Main!")
+}
+```
+
+## ✅ 2. Channels
+Channels are used to safely share data between goroutines.
+
+- Unbuffered Channels: Block until both sender and receiver are ready.
+- Buffered Channels: Have a specified capacity and won't block until full.
+
+Example:
+```go
+package main
+import "fmt"
+
+func square(number int, ch chan int) {
+	result := number * number
+	ch <- result // Send result to channel
+}
+
+func main() {
+	ch := make(chan int)
+	go square(4, ch) // Run square in a Goroutine
+
+	fmt.Println("Square is:", <-ch) // Receive result from channel
+}
+```
+
+## ✅ 3. Wait Groups
+Use Wait Groups to wait for multiple goroutines to complete before moving on.
+
+Example:
+```go
+package main
+import (
+	"fmt"
+	"sync"
+)
+
+func printTask(id int, wg *sync.WaitGroup) {
+	defer wg.Done() // Mark as done
+	fmt.Printf("Task %d is completed\n", id)
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	for i := 1; i <= 5; i++ {
+		wg.Add(1) // Add to the wait group
+		go printTask(i, &wg)
+	}
+
+	wg.Wait() // Wait for all goroutines to finish
+	fmt.Println("All tasks completed")
+}
+```
+
+## ✅ 4. Mutex for Synchronization
+A Mutex (short for mutual exclusion) ensures that only one goroutine accesses a shared resource at a time.
+
+Example:
+```go
+package main
+import (
+	"fmt"
+	"sync"
+)
+
+var counter int
+var mutex sync.Mutex
+
+func increment(wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	mutex.Lock()
+	counter++
+	mutex.Unlock()
+}
+
+func main() {
+	var wg sync.WaitGroup
+
+	for i := 0; i < 1000; i++ {
+		wg.Add(1)
+		go increment(&wg)
+	}
+
+	wg.Wait()
+	fmt.Println("Final Counter:", counter)
+}
+```
+
+## ✅ Concurrency vs Parallelism
+- Concurrency: Tasks start, pause, and resume to make progress. Tasks may not run at the same time.
+- Parallelism: Tasks run at the exact same time using multiple CPU cores.
+
+Go schedules goroutines using GOMAXPROCS (number of CPU cores). By default, it uses all available cores.
+
+## ✅ Best Practices for Concurrency in Go
+- Use channels to safely share data between goroutines.
+- Use wait groups to wait for multiple goroutines to finish.
+- Use mutex to protect shared resources.
+- Avoid data races by using proper synchronization mechanisms.
+- Limit the number of goroutines to prevent resource exhaustion.
