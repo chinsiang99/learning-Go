@@ -676,3 +676,9 @@ Go schedules goroutines using GOMAXPROCS (number of CPU cores). By default, it u
 - Use mutex to protect shared resources.
 - Avoid data races by using proper synchronization mechanisms.
 - Limit the number of goroutines to prevent resource exhaustion.
+
+### 🔎 Analogy to Remember
+1. Concurrency is like a chef cooking multiple dishes:
+- The chef prepares multiple dishes by switching between them (checking the oven, stirring a pot).
+2. Parallelism is like multiple chefs cooking at the same time:
+- Each chef is responsible for one dish, cooking simultaneously.
