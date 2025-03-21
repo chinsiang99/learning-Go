@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"chinsiang.com/rest-api/models"
+	"chinsiang.com/rest-api/routes"
+	"chinsiang.com/rest-api/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -40,15 +42,27 @@ func main() {
 		}
 		c.Next()
 	})
-	server.GET("/events", getEvents)
+
+	// Register all routes
+	routes.RegisterRoutes(server)
+
+	// server.GET("/events", getEvents)
 	// server.POST("/events", createEvent)
 	server.Run(":" + port) // run the server on localhost:9999
 }
 
-func getEvents(context *gin.Context) {
-	events := models.GetAllEvents()
-	context.JSON(http.StatusOK, gin.H{
-		"message": "Hello, World!",
-		"events":  events,
-	})
+func createEvent(context *gin.Context) {
+	var event models.Event
+	err := context.ShouldBindJSON(&event)
+	if err != nil {
+		validationErrors := utils.HandleValidationError(err, event.ValidationMessages())
+		if len(validationErrors) > 0 {
+			context.JSON(http.StatusBadRequest, gin.H{"errors": validationErrors})
+			return
+		}
+		context.JSON(http.StatusInternalServerError, gin.H{"error": "An unexpected error occurred"})
+		return
+	}
+	event.Save()
+	context.JSON(http.StatusCreated, gin.H{"message": "Event created successfully", "event": event})
 }

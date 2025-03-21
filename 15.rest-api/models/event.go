@@ -4,11 +4,21 @@ import "time"
 
 type Event struct {
 	ID          string    `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Location    string    `json:"location"`
-	DateTime    time.Time `json:"dateTime"`
+	Title       string    `json:"title" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	Location    string    `json:"location" binding:"required"`
+	DateTime    time.Time `json:"dateTime" binding:"required"`
 	UserID      int       `json:"userId"`
+}
+
+// Custom validation error messages for Event
+func (e *Event) ValidationMessages() map[string]string {
+	return map[string]string{
+		"title":       "Event title cannot be empty.",
+		"description": "Please provide a valid event description.",
+		"location":    "Location must be specified.",
+		"dateTime":    "Provide a valid date and time for the event.",
+	}
 }
 
 var events = []Event{}

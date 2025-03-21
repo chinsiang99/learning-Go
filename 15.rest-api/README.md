@@ -1,6 +1,8 @@
 # Installing Gin framework
 > go get -u github.com/gin-gonic/gin v1.9.1
 
+> go get github.com/go-playground/validator/v10 // for validation
+
 # ✅ List of Common HTTP Status Constants
 Here are a few commonly used constants from net/http:
 
