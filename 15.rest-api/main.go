@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"chinsiang.com/rest-api/models"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -40,11 +41,14 @@ func main() {
 		c.Next()
 	})
 	server.GET("/events", getEvents)
+	// server.POST("/events", createEvent)
 	server.Run(":" + port) // run the server on localhost:9999
 }
 
 func getEvents(context *gin.Context) {
+	events := models.GetAllEvents()
 	context.JSON(http.StatusOK, gin.H{
 		"message": "Hello, World!",
+		"events":  events,
 	})
 }
