@@ -16,6 +16,10 @@ func (w *Wallet) Balance() Bitcoin {
 	return w.balance
 }
 
+func (w *Wallet) Withdraw(money Bitcoin) {
+	w.balance = w.balance - money
+}
+
 type Stringer interface {
 	String() string
 }
