@@ -17,15 +17,30 @@ func TestWallet(t *testing.T) {
 	})
 
 	t.Run("withdraw successfully", func(t *testing.T) {
-		wallet := Wallet{balance: Bitcoin(80)}
+		withdrawTestCases := []struct {
+			name        string
+			startingBal Bitcoin
+			withdrawAmt Bitcoin
+			wantBal     Bitcoin
+		}{
+			{name: "withdraw 10 from 80", startingBal: Bitcoin(80), withdrawAmt: Bitcoin(10), wantBal: Bitcoin(70)},
+			{name: "withdraw entire balance", startingBal: Bitcoin(50), withdrawAmt: Bitcoin(50), wantBal: Bitcoin(0)},
+			{name: "withdraw nothing", startingBal: Bitcoin(20), withdrawAmt: Bitcoin(0), wantBal: Bitcoin(20)},
+		}
 
-		wallet.Withdraw(Bitcoin(10))
+		for _, tc := range withdrawTestCases {
+			t.Run(tc.name, func(t *testing.T) {
+				wallet := Wallet{balance: tc.startingBal}
 
-		got := wallet.Balance().String()
-		want := Bitcoin(70).String()
+				wallet.Withdraw(tc.withdrawAmt)
 
-		if got != want {
-			t.Errorf("got %s want %s", got, want)
+				got := wallet.Balance().String()
+				want := tc.wantBal.String()
+
+				if got != want {
+					t.Errorf("got %s want %s", got, want)
+				}
+			})
 		}
 	})
 }
