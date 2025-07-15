@@ -57,19 +57,22 @@ func TestPerimeter(t *testing.T) {
 
 func TestArea(t *testing.T) {
 	areaTestCases := []struct {
+		name  string
 		shape Shape
 		want  float64
 	}{
-		{shape: Rectangle{Width: 12, Height: 6}, want: 72.0},
-		{shape: Circle{Radius: 10}, want: 314.1592653589793},
-		{shape: Triangle{Base: 12, Height: 6}, want: 36.0},
+		{name: "rectangle", shape: Rectangle{Width: 12, Height: 6}, want: 72.0},
+		{name: "circle", shape: Circle{Radius: 10}, want: 314.1592653589793},
+		{name: "triangle", shape: Triangle{Base: 12, Height: 6}, want: 36.1},
 	}
 
 	for _, testCase := range areaTestCases {
-		got := testCase.shape.Area()
-		want := testCase.want
+		t.Run(testCase.name, func(t *testing.T) {
+			got := testCase.shape.Area()
+			want := testCase.want
 
-		assertCorrectMessage(t, got, want)
+			assertCorrectMessageArea(t, got, want, testCase.shape)
+		})
 	}
 }
 
@@ -81,9 +84,16 @@ func TestArea(t *testing.T) {
 // 	}
 // }
 
-func assertCorrectMessage(t testing.TB, got, want any) {
+// func assertCorrectMessage(t testing.TB, got, want any) {
+// 	t.Helper()
+// 	if !reflect.DeepEqual(got, want) {
+// 		t.Errorf("got %g want %g", got, want)
+// 	}
+// }
+
+func assertCorrectMessageArea(t testing.TB, got, want any, shape Shape) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %g want %g", got, want)
+		t.Errorf("%#v got %g want %g", shape, got, want)
 	}
 }
