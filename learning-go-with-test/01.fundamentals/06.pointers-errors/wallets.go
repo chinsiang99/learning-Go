@@ -1,8 +1,13 @@
 package pointers
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Bitcoin int
+
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
 
 type Wallet struct {
 	balance Bitcoin
@@ -16,8 +21,13 @@ func (w *Wallet) Balance() Bitcoin {
 	return w.balance
 }
 
-func (w *Wallet) Withdraw(money Bitcoin) {
+func (w *Wallet) Withdraw(money Bitcoin) error {
+	if w.balance < money {
+		return ErrInsufficientFunds
+	}
+
 	w.balance = w.balance - money
+	return nil
 }
 
 type Stringer interface {
