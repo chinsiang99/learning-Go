@@ -47,3 +47,6 @@ func (dictionary Dictionary) Delete(word string) error {
 func Search(dictionary Dictionary, word string) string {
 	return dictionary[word]
 }
+
+// please note to check how to declare constant error such as ErrorNotFoundWord in go, with specific domain, it is very useful man
+// please remember to review it
